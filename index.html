@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akash Varma — AI · ML · Energy Transition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg: #0F1410;
+    --surface: #171D18;
+    --card: #1E2620;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.13);
+    --text: #E8E2D9;
+    --text-muted: #8A9188;
+    --moss: #7ABF6F;
+    --moss-dim: #4A7A42;
+    --amber: #D4A96A;
+    --amber-dim: #6B5030;
+    --terracotta: #C97A5A;
+    --white: #F0EDE8;
+  }
+  body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; }
+
+  /* NAV */
+  nav {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:1.1rem 2.5rem; background:rgba(15,20,16,0.95);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+    backdrop-filter:blur(8px);
+  }
+  .nav-logo { font-family:'Lora',serif; font-size:1.05rem; font-weight:600; color:var(--white); cursor:pointer; }
+  .nav-links { display:flex; gap:2rem; list-style:none; }
+  .nav-links li {
+    font-size:0.82rem; font-weight:400; letter-spacing:0.07em; text-transform:uppercase;
+    color:var(--text-muted); cursor:pointer; transition:color 0.2s;
+    padding-bottom:2px; border-bottom:1.5px solid transparent;
+  }
+  .nav-links li:hover, .nav-links li.active { color:var(--moss); border-bottom-color:var(--moss); }
+
+  .page { display:none; }
+  .page.active { display:block; }
+
+  /* HOME */
+  .home-hero { display:grid; grid-template-columns:1fr 1fr; min-height:88vh; }
+  .hero-left { padding:5rem 3rem 4rem 4rem; display:flex; flex-direction:column; justify-content:center; }
+  .hero-tag {
+    display:inline-block; background:rgba(122,191,111,0.12); color:var(--moss);
+    font-size:0.71rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase;
+    padding:0.35rem 0.9rem; border-radius:20px; margin-bottom:1.8rem;
+    border:1px solid rgba(122,191,111,0.2);
+  }
+  .hero-name { font-family:'Lora',serif; font-size:3.4rem; font-weight:600; line-height:1.12; color:var(--white); margin-bottom:0.5rem; }
+  .hero-title { font-family:'Lora',serif; font-size:1.2rem; font-weight:400; font-style:italic; color:var(--amber); margin-bottom:1.8rem; line-height:1.5; }
+  .hero-bio { font-size:0.93rem; line-height:1.85; color:var(--text-muted); max-width:430px; margin-bottom:2.5rem; }
+  .hero-bio strong { color:var(--text); font-weight:500; }
+  .hero-ctas { display:flex; gap:1rem; }
+  .btn-primary {
+    background:var(--moss-dim); color:var(--white); border:none;
+    padding:0.72rem 1.8rem; border-radius:30px; font-size:0.875rem; font-weight:500;
+    cursor:pointer; transition:background 0.2s,transform 0.15s; font-family:'DM Sans',sans-serif;
+  }
+  .btn-primary:hover { background:#3d6636; transform:translateY(-1px); }
+  .btn-secondary {
+    background:transparent; color:var(--text); border:1px solid var(--border-hover);
+    padding:0.72rem 1.8rem; border-radius:30px; font-size:0.875rem;
+    cursor:pointer; transition:border-color 0.2s,background 0.2s; font-family:'DM Sans',sans-serif;
+  }
+  .btn-secondary:hover { border-color:var(--amber-dim); background:rgba(212,169,106,0.06); }
+
+  .hero-right {
+    background:var(--surface); display:flex; align-items:center; justify-content:center;
+    padding:3rem; position:relative; overflow:hidden;
+  }
+  .avatar-wrap { position:relative; display:flex; align-items:center; justify-content:center; }
+  .deco-ring { position:absolute; border:1px solid rgba(122,191,111,0.15); border-radius:50%; }
+  .avatar-circle {
+    width:210px; height:210px; border-radius:50%;
+    background:var(--card); border:1px solid rgba(122,191,111,0.2);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    position:relative; z-index:1; gap:0.4rem;
+    overflow:hidden;
+  }
+  .avatar-circle img { width:100%; height:100%; object-fit:cover; }
+  .avatar-initials { font-family:'Lora',serif; font-size:3rem; font-weight:600; color:var(--moss-dim); }
+  .avatar-hint { font-size:0.68rem; color:var(--text-muted); letter-spacing:0.04em; }
+
+  .skills-strip {
+    background:var(--surface); border-top:1px solid var(--border);
+    padding:1.5rem 4rem; display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center;
+  }
+  .skills-label { font-size:0.75rem; color:var(--text-muted); letter-spacing:0.08em; text-transform:uppercase; margin-right:0.5rem; }
+  .skill-chip {
+    font-size:0.73rem; background:rgba(122,191,111,0.08); color:var(--moss);
+    border:1px solid rgba(122,191,111,0.15); padding:0.22rem 0.7rem; border-radius:20px;
+  }
+
+  /* SECTION */
+  .section-wrap { max-width:860px; margin:0 auto; padding:4.5rem 2.5rem; }
+  .section-header { margin-bottom:3.5rem; }
+  .section-eyebrow { font-size:0.71rem; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(--terracotta); margin-bottom:0.7rem; }
+  .section-title { font-family:'Lora',serif; font-size:2.1rem; font-weight:600; color:var(--white); margin-bottom:0.6rem; line-height:1.25; }
+  .section-sub { font-size:0.93rem; color:var(--text-muted); line-height:1.75; max-width:560px; }
+
+  /* TIMELINE */
+  .timeline { position:relative; padding-left:1.8rem; }
+  .timeline::before { content:''; position:absolute; left:0; top:8px; bottom:8px; width:1.5px; background:rgba(122,191,111,0.15); }
+  .timeline-item { position:relative; padding-bottom:2.5rem; }
+  .timeline-item:last-child { padding-bottom:0; }
+  .timeline-dot {
+    position:absolute; left:-1.8rem; top:10px; width:10px; height:10px;
+    background:var(--moss-dim); border-radius:50%;
+    border:2px solid var(--bg); box-shadow:0 0 0 1.5px var(--moss-dim);
+    transform:translateX(-4px);
+  }
+  .exp-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:12px; padding:1.6rem 1.8rem; transition:border-color 0.2s;
+  }
+  .exp-card:hover { border-color:var(--border-hover); }
+  .exp-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.3rem; }
+  .exp-role { font-family:'Lora',serif; font-size:1.05rem; font-weight:600; color:var(--white); }
+  .exp-date {
+    font-size:0.75rem; color:var(--text-muted); background:rgba(255,255,255,0.05);
+    padding:0.22rem 0.65rem; border-radius:20px; white-space:nowrap; margin-left:1rem; flex-shrink:0;
+  }
+  .exp-company { font-size:0.88rem; color:var(--moss); font-weight:500; margin-bottom:0.9rem; }
+  .exp-desc { font-size:0.88rem; color:var(--text-muted); line-height:1.82; margin-bottom:1rem; }
+  .exp-tags { display:flex; flex-wrap:wrap; gap:0.4rem; }
+  .tag {
+    font-size:0.71rem; background:rgba(212,169,106,0.1); color:var(--amber);
+    border:1px solid rgba(212,169,106,0.18); padding:0.22rem 0.65rem; border-radius:20px;
+  }
+  .tag-ph {
+    font-size:0.71rem; background:rgba(255,255,255,0.04); color:var(--text-muted);
+    border:1px dashed rgba(255,255,255,0.1); padding:0.22rem 0.65rem; border-radius:20px; font-style:italic;
+  }
+  .ph-badge {
+    display:inline-block; background:rgba(255,255,255,0.04); border:1px dashed rgba(255,255,255,0.12);
+    color:var(--text-muted); font-size:0.67rem; padding:0.15rem 0.5rem;
+    border-radius:12px; font-style:italic; margin-left:0.4rem; vertical-align:middle;
+  }
+
+  /* EDUCATION */
+  .edu-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-top:1rem; }
+  .edu-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1.2rem 1.3rem; }
+  .edu-degree { font-size:0.82rem; font-weight:500; color:var(--white); margin-bottom:0.3rem; line-height:1.4; }
+  .edu-inst { font-size:0.78rem; color:var(--moss); margin-bottom:0.25rem; }
+  .edu-year { font-size:0.73rem; color:var(--text-muted); }
+
+  /* TRAVEL */
+  .travel-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); margin-bottom:3rem; }
+  .travel-card { background:var(--surface); overflow:hidden; cursor:pointer; position:relative; }
+  .travel-ph {
+    width:100%; aspect-ratio:4/3;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:0.5rem; transition:background 0.3s;
+  }
+  .travel-card:hover .travel-ph { background:#1e2820; }
+  .travel-card img { width:100%; aspect-ratio:4/3; object-fit:cover; display:block; transition:transform 0.4s; }
+  .travel-card:hover img { transform:scale(1.04); }
+  .travel-ph-icon { font-size:1.8rem; opacity:0.25; }
+  .travel-ph-text { font-size:0.68rem; color:var(--text-muted); opacity:0.6; letter-spacing:0.04em; }
+  .travel-overlay {
+    position:absolute; bottom:0; left:0; right:0;
+    background:linear-gradient(transparent,rgba(5,10,6,0.82));
+    padding:2rem 1rem 0.9rem;
+  }
+  .travel-place { font-family:'Lora',serif; font-size:0.95rem; font-weight:600; color:rgba(255,255,255,0.85); }
+  .travel-region { font-size:0.7rem; color:rgba(255,255,255,0.55); margin-top:0.1rem; }
+
+  .featured-label { font-size:0.71rem; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(--terracotta); margin-bottom:1rem; }
+  .featured-story {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:12px; padding:2rem;
+    display:grid; grid-template-columns:1fr 1.6fr; gap:2rem; align-items:center;
+  }
+  .featured-img-wrap {
+    border-radius:8px; overflow:hidden; aspect-ratio:1;
+    background:var(--surface); display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:0.5rem;
+  }
+  .featured-img-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
+  .featured-title { font-family:'Lora',serif; font-size:1.3rem; font-weight:600; color:rgba(240,237,232,0.5); line-height:1.4; margin-bottom:0.5rem; font-style:italic; }
+  .featured-meta { font-size:0.78rem; color:var(--text-muted); margin-bottom:1rem; opacity:0.6; }
+  .featured-excerpt { font-size:0.88rem; color:var(--text-muted); line-height:1.78; font-style:italic; opacity:0.65; }
+
+  /* BLOG */
+  .blog-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1.2rem; margin-top:2.5rem; }
+  .blog-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:12px; overflow:hidden; transition:border-color 0.2s,transform 0.2s;
+  }
+  .blog-card:hover { transform:translateY(-3px); border-color:var(--border-hover); }
+  .blog-card-top {
+    height:120px; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:0.4rem; background:var(--surface);
+    overflow:hidden;
+  }
+  .blog-card-top img { width:100%; height:100%; object-fit:cover; display:block; }
+  .blog-ph-icon { font-size:1.6rem; opacity:0.2; }
+  .blog-ph-text { font-size:0.67rem; color:var(--text-muted); opacity:0.5; letter-spacing:0.04em; }
+  .blog-body { padding:1.3rem 1.4rem 1.5rem; }
+  .blog-category { font-size:0.69rem; font-weight:500; letter-spacing:0.09em; text-transform:uppercase; color:var(--terracotta); margin-bottom:0.45rem; font-style:italic; opacity:0.8; }
+  .blog-title { font-family:'Lora',serif; font-size:0.97rem; font-weight:600; color:rgba(240,237,232,0.5); line-height:1.45; margin-bottom:0.4rem; font-style:italic; }
+  .blog-footer { display:flex; justify-content:space-between; align-items:center; margin-top:1rem; }
+  .blog-date { font-size:0.75rem; color:var(--text-muted); opacity:0.55; }
+  .blog-read { font-size:0.75rem; color:var(--moss); font-weight:500; opacity:0.6; }
+  .blog-cta {
+    margin-top:2.5rem; background:rgba(122,191,111,0.05);
+    border:1px dashed rgba(122,191,111,0.2); border-radius:12px; padding:2rem; text-align:center;
+  }
+  .blog-cta-title { font-family:'Lora',serif; font-size:1.05rem; font-weight:600; color:var(--white); margin-bottom:0.5rem; }
+  .blog-cta-text { font-size:0.87rem; color:var(--text-muted); margin-bottom:1.2rem; line-height:1.7; }
+
+  /* PUBLICATIONS */
+  .pub-strip { margin-top:2.5rem; }
+  .pub-title { font-size:0.71rem; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-muted); margin-bottom:1rem; }
+  .pub-item {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:8px; padding:0.9rem 1.1rem; margin-bottom:0.6rem;
+    font-size:0.83rem; color:var(--text-muted); line-height:1.55;
+  }
+  .pub-item span { color:var(--amber); font-size:0.75rem; display:block; margin-top:0.2rem; }
+
+  /* CONTACT */
+  .contact-bar {
+    background:var(--surface); border-top:1px solid var(--border);
+    padding:1.2rem 4rem; display:flex; gap:1.5rem; align-items:center; justify-content:center;
+  }
+  .contact-link {
+    font-size:0.82rem; color:var(--text-muted); text-decoration:none;
+    transition:color 0.2s; display:flex; align-items:center; gap:0.4rem;
+  }
+  .contact-link:hover { color:var(--moss); }
+
+  /* RESPONSIVE */
+  @media(max-width:680px) {
+    .home-hero { grid-template-columns:1fr; }
+    .hero-right { display:none; }
+    .hero-left { padding:3rem 1.5rem; }
+    .hero-name { font-size:2.4rem; }
+    .edu-grid { grid-template-columns:1fr; }
+    .blog-grid { grid-template-columns:1fr; }
+    .travel-grid { grid-template-columns:repeat(2,1fr); }
+    .skills-strip { padding:1.2rem 1.5rem; }
+    nav { padding:1rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo" onclick="navigate('home')">Akash Varma</div>
+  <ul class="nav-links">
+    <li onclick="navigate('home')" id="nav-home" class="active">Home</li>
+    <li onclick="navigate('experience')" id="nav-experience">Experience</li>
+    <li onclick="navigate('travel')" id="nav-travel">Travel</li>
+    <li onclick="navigate('blog')" id="nav-blog">Blog</li>
+  </ul>
+</nav>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="home-hero">
+    <div class="hero-left">
+      <span class="hero-tag">AI · ML · Energy Transition</span>
+      <h1 class="hero-name">Akash<br>Varma</h1>
+      <p class="hero-title">Researcher · Process Engineer · Battery Technologist</p>
+      <p class="hero-bio">
+        I'm an energy-tech professional at the <strong>Technology Innovation Institute, Abu Dhabi</strong> — blending process engineering, physics-based modeling, and AI/ML to accelerate the clean energy transition.<br><br>
+        Previously, I helped build one of India's first Li-ion pilot production lines at <strong>Log9 Materials</strong> — from coin-cell research all the way to 50 MWh/year scale. I'm excited to shape the future of cleantech.
+      </p>
+      <div class="hero-ctas">
+        <button class="btn-primary" onclick="navigate('experience')">My work</button>
+        <button class="btn-secondary" onclick="navigate('blog')">Read my writing</button>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="avatar-wrap">
+        <div class="deco-ring" style="width:285px;height:285px;"></div>
+        <div class="deco-ring" style="width:250px;height:250px;opacity:0.5;"></div>
+        <div class="avatar-circle">
+          <!-- TO ADD YOUR PHOTO: replace the two lines below with:
+               <img src="your-photo.jpg" alt="Akash Varma">
+               and remove the avatar-initials and avatar-hint spans -->
+          <span class="avatar-initials">AV</span>
+          <span class="avatar-hint">add your photo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="skills-strip">
+    <span class="skills-label">Tech stack</span>
+    <span class="skill-chip">Python</span>
+    <span class="skill-chip">TensorFlow</span>
+    <span class="skill-chip">PyBAMM</span>
+    <span class="skill-chip">GT-AutoLion</span>
+    <span class="skill-chip">COMSOL</span>
+    <span class="skill-chip">Scikit-learn</span>
+    <span class="skill-chip">MATLAB/Simulink</span>
+    <span class="skill-chip">BatteryML</span>
+    <span class="skill-chip">PyBOP</span>
+  </div>
+</div>
+
+<!-- EXPERIENCE -->
+<div id="page-experience" class="page">
+  <div class="section-wrap">
+    <div class="section-header">
+      <p class="section-eyebrow">Work history</p>
+      <h2 class="section-title">Experience</h2>
+      <p class="section-sub">From ground-up battery R&D at a startup to AI-powered energy research at a national institute — a career built on building things that matter.</p>
+    </div>
+
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="exp-card">
+          <div class="exp-top">
+            <div class="exp-role">Researcher — Energy Systems &amp; Materials</div>
+            <span class="exp-date">Nov 2023 – Present</span>
+          </div>
+          <div class="exp-company">Technology Innovation Institute · Abu Dhabi, UAE</div>
+          <p class="exp-desc">Leveraging AI/ML and physics-based multi-scale modeling for energy research. Working at the frontier of energy systems and materials science to develop next-generation solutions for the clean energy transition.</p>
+          <div class="exp-tags">
+            <span class="tag">AI/ML</span>
+            <span class="tag">Multi-scale modeling</span>
+            <span class="tag">Energy systems</span>
+            <span class="tag">Materials research</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="exp-card">
+          <div class="exp-top">
+            <div class="exp-role">Lead Engineer — Cell Modelling &amp; Simulations</div>
+            <span class="exp-date">Dec 2022 – Nov 2023</span>
+          </div>
+          <div class="exp-company">Log9 Materials · Bengaluru, India</div>
+          <p class="exp-desc">Led a founding team of five engineers in battery cell modelling &amp; simulation. Built the simulation practice from scratch — installation, training, team building, and delivering impactful outcomes in aging analysis and state-of-health prediction.</p>
+          <div class="exp-tags">
+            <span class="tag">GT-AutoLion</span>
+            <span class="tag">PyBAMM</span>
+            <span class="tag">SOH prediction</span>
+            <span class="tag">Cell parameterization</span>
+            <span class="tag">Team leadership</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="exp-card">
+          <div class="exp-top">
+            <div class="exp-role">Senior Researcher — Cell &amp; Process Engineering</div>
+            <span class="exp-date">May 2022 – Dec 2022</span>
+          </div>
+          <div class="exp-company">Log9 Materials · Bengaluru, India</div>
+          <p class="exp-desc">Led scale-up of Li-ion batteries from coin-cell to high-energy-density cylindrical form factors (18650, 21700, 4680, 66160) for LFP and high-nickel NMC chemistries. Dissected and analysed 50+ commercial cells for design insights and internal benchmarking.</p>
+          <div class="exp-tags">
+            <span class="tag">Cell scale-up</span>
+            <span class="tag">LFP / NMC</span>
+            <span class="tag">Process engineering</span>
+            <span class="tag">Cell teardown</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="exp-card">
+          <div class="exp-top">
+            <div class="exp-role">Researcher — Li-ion Cell R&amp;D</div>
+            <span class="exp-date">Jun 2021 – May 2022</span>
+          </div>
+          <div class="exp-company">Log9 Materials · Bengaluru, India</div>
+          <p class="exp-desc">Very first member of the team involved in the ground-up technological development of Li-ion cells at Log9. A founding chapter that shaped everything that came after — from lab bench to pilot line.</p>
+          <div class="exp-tags">
+            <span class="tag">Li-ion R&amp;D</span>
+            <span class="tag">Cell fabrication</span>
+            <span class="tag">Early-stage startup</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="exp-card">
+          <div class="exp-top">
+            <div class="exp-role">Research Fellow — Batteries &amp; Supercapacitors</div>
+            <span class="exp-date">Aug 2020 – Apr 2021</span>
+          </div>
+          <div class="exp-company">IIT Gandhinagar · Gandhinagar, India</div>
+          <p class="exp-desc">Developed alternative Li-ion battery anodes using boron-based 2D-materials for fast-charging applications.</p>
+          <div class="exp-tags">
+            <span class="tag">2D materials</span>
+            <span class="tag">Anode development</span>
+            <span class="tag">Fast-charging</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Education -->
+    <div style="margin-top:3.5rem;">
+      <p class="section-eyebrow">Education</p>
+      <h3 style="font-family:'Lora',serif;font-size:1.4rem;font-weight:600;color:var(--white);margin-bottom:1.5rem;">Academic background</h3>
+      <div class="edu-grid">
+        <div class="edu-card">
+          <div class="edu-degree">MS · Material Science</div>
+          <div class="edu-inst">Japan Advanced Institute of Science &amp; Technology</div>
+          <div class="edu-year">2018 – 2020 · Ishikawa, Japan</div>
+        </div>
+        <div class="edu-card">
+          <div class="edu-degree">MTech · Chemical Engineering</div>
+          <div class="edu-inst">IIT Gandhinagar</div>
+          <div class="edu-year">2018 – 2020 · Dual Degree · 🏅 Gold Medal</div>
+        </div>
+        <div class="edu-card">
+          <div class="edu-degree">BTech · Chemical Engineering</div>
+          <div class="edu-inst">UDCT Mumbai</div>
+          <div class="edu-year">2014 – 2018</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Publications -->
+    <div class="pub-strip">
+      <div class="pub-title">Selected publications &amp; patents</div>
+      <div class="pub-item">Nanosheets Derived through Dissolution-Recrystallization of TiB₂ as Efficient Anode for Sodium-Ion Batteries<span>Journal publication · Featured on Phys.org</span></div>
+      <div class="pub-item">Co-solvent exfoliation of layered titanium diboride into few-layer-thick nanosheets<span>Journal publication</span></div>
+      <div class="pub-item">Apparent kinetics of fast pyrolysis of four different microalgae and product analyses using pyrolysis-FTIR and GC/MS<span>Journal publication · IIT Madras</span></div>
+      <div class="pub-item">3 Patents: Anode material &amp; preparation · Formation process for Li-ion batteries · Anode material for Li-ion battery<span>Patent filings</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TRAVEL -->
+<div id="page-travel" class="page">
+  <div class="section-wrap" style="padding-bottom:2rem;">
+    <div class="section-header">
+      <p class="section-eyebrow">Around the world</p>
+      <h2 class="section-title">Places &amp; stories</h2>
+      <!-- TODO: Add your travel intro here -->
+      <p class="section-sub" style="font-style:italic;opacity:0.6;">Add a line about what travel means to you — the places that shaped your perspective. <span class="ph-badge">placeholder</span></p>
+    </div>
+  </div>
+
+  <div class="travel-grid">
+    <!-- TO ADD PHOTOS: replace the travel-ph div with <img src="your-photo.jpg" alt="Destination"> -->
+    <div class="travel-card">
+      <div class="travel-ph"><div class="travel-ph-icon">🖼</div><div class="travel-ph-text">add photo</div></div>
+      <div class="travel-overlay"><div class="travel-place">Destination 1</div><div class="travel-region">Country / Region</div></div>
+    </div>
+    <div class="travel-card">
+      <div class="travel-ph"><div class="travel-ph-icon">🖼</div><div class="travel-ph-text">add photo</div></div>
+      <div class="travel-overlay"><div class="travel-place">Destination 2</div><div class="travel-region">Country / Region</div></div>
+    </div>
+    <div class="travel-card">
+      <div class="travel-ph"><div class="travel-ph-icon">🖼</div><div class="travel-ph-text">add photo</div></div>
+      <div class="travel-overlay"><div class="travel-place">Destination 3</div><div class="travel-region">Country / Region</div></div>
+    </div>
+    <div class="travel-card">
+      <div class="travel-ph"><div class="travel-ph-icon">🖼</div><div class="travel-ph-text">add photo</div></div>
+      <div class="travel-overlay"><div class="travel-place">Destination 4</div><div class="travel-region">Country / Region</div></div>
+    </div>
+    <div class="travel-card">
+      <div class="travel-ph"><div class="travel-ph-icon">🖼</div><div class="travel-ph-text">add photo</div></div>
+      <div class="travel-overlay"><div class="travel-place">Destination 5</div><div class="travel-region">Country / Region</div></div>
+    </div>
+    <div class="travel-card">
+      <div class="travel-ph"><div class="travel-ph-icon">🖼</div><div class="travel-ph-text">add photo</div></div>
+      <div class="travel-overlay"><div class="travel-place">Destination 6</div><div class="travel-region">Country / Region</div></div>
+    </div>
+  </div>
+
+  <div class="section-wrap" style="padding-top:0;">
+    <div class="featured-label">Featured story</div>
+    <div class="featured-story">
+      <div class="featured-img-wrap">
+        <div class="travel-ph-icon" style="font-size:2rem;">🖼</div>
+        <div class="travel-ph-text">add photo</div>
+      </div>
+      <div>
+        <h3 class="featured-title">Your favourite travel story — the moment that stayed with you <span class="ph-badge">placeholder</span></h3>
+        <p class="featured-meta">Month Year · X min read</p>
+        <p class="featured-excerpt">A short teaser — what happened, what you felt, what you took away. This is the human heart of your travel section.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOG -->
+<div id="page-blog" class="page">
+  <div class="section-wrap">
+    <div class="section-header">
+      <p class="section-eyebrow">Writing</p>
+      <h2 class="section-title">Cleantech perspectives</h2>
+      <p class="section-sub">Thoughts on batteries, AI in energy, the transition, and the ideas shaping a cleaner world.</p>
+    </div>
+
+    <div class="blog-grid">
+      <!-- TO ADD BLOG POSTS: replace blog-title text, blog-category, blog-date, and optionally add an <img> inside blog-card-top -->
+      <div class="blog-card">
+        <div class="blog-card-top"><div class="blog-ph-icon">📝</div><div class="blog-ph-text">add cover image</div></div>
+        <div class="blog-body">
+          <div class="blog-category">Topic / Theme</div>
+          <h3 class="blog-title">Your first article title — something you've been thinking about <span class="ph-badge">placeholder</span></h3>
+          <div class="blog-footer"><span class="blog-date">Month Year</span><span class="blog-read">Read →</span></div>
+        </div>
+      </div>
+      <div class="blog-card">
+        <div class="blog-card-top"><div class="blog-ph-icon">📝</div><div class="blog-ph-text">add cover image</div></div>
+        <div class="blog-body">
+          <div class="blog-category">Topic / Theme</div>
+          <h3 class="blog-title">Second article — a perspective only you can offer <span class="ph-badge">placeholder</span></h3>
+          <div class="blog-footer"><span class="blog-date">Month Year</span><span class="blog-read">Read →</span></div>
+        </div>
+      </div>
+      <div class="blog-card">
+        <div class="blog-card-top"><div class="blog-ph-icon">📝</div><div class="blog-ph-text">add cover image</div></div>
+        <div class="blog-body">
+          <div class="blog-category">Topic / Theme</div>
+          <h3 class="blog-title">Third article — a question you keep coming back to <span class="ph-badge">placeholder</span></h3>
+          <div class="blog-footer"><span class="blog-date">Month Year</span><span class="blog-read">Read →</span></div>
+        </div>
+      </div>
+      <div class="blog-card">
+        <div class="blog-card-top"><div class="blog-ph-icon">📝</div><div class="blog-ph-text">add cover image</div></div>
+        <div class="blog-body">
+          <div class="blog-category">Topic / Theme</div>
+          <h3 class="blog-title">Fourth article — a story from the lab or field that changed your thinking <span class="ph-badge">placeholder</span></h3>
+          <div class="blog-footer"><span class="blog-date">Month Year</span><span class="blog-read">Read →</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="blog-cta">
+      <div class="blog-cta-title">Have something to discuss?</div>
+      <p class="blog-cta-text">I write about batteries, AI in energy, and the clean energy transition. If a topic moves you, I'd love the conversation.</p>
+      <a href="mailto:akashvarmanmu@gmail.com" class="btn-primary" style="text-decoration:none;display:inline-block;">Get in touch</a>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT BAR -->
+<div class="contact-bar">
+  <a href="mailto:akashvarmanmu@gmail.com" class="contact-link">✉ akashvarmanmu@gmail.com</a>
+  <a href="https://www.linkedin.com/in/akash-varma-7b3a65104/" target="_blank" class="contact-link">in LinkedIn</a>
+</div>
+
+<script>
+  function navigate(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-links li').forEach(l => l.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    document.getElementById('nav-' + page).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+</script>
+
+</body>
+</html>
